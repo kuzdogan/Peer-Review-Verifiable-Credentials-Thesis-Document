@@ -8,7 +8,7 @@
 \usepackage[%
   backend=biber,
   url=true,
-  style=numeric, % alphabetic, numeric
+  style=apa, % alphabetic, numeric
   sorting=none, % default == nty, https://tex.stackexchange.com/questions/51434/biblatex-citation-order
   maxnames=4,
   minnames=3,
@@ -55,7 +55,7 @@
 \bibliography{bibliography}
 
 \setkomafont{disposition}{\normalfont\bfseries} % use serif font for headings
-\linespread{1.05} % adjust line spread for mathpazo font
+\linespread{1.25} % adjust line spread for mathpazo font
 
 % Add table of contents to PDF bookmarks
 \BeforeTOCHead[toc]{{\cleardoublepage\pdfbookmark[0]{\contentsname}{toc}}}
