@@ -1,5 +1,8 @@
-# LaTeX template for TUM theses
+# Master's Thesis: Peer Review Verification with Verifiable Credentials and Zero-Knowledge Proofs
+Preview can is accessible [here](https://www.overleaf.com/read/tsnvcmkgqsmh)
 
+
+# LaTeX template for TUM theses
 This is a LaTeX template created according to the guidelines for TUM informatics theses in SS 2013. **Always check the [current formatting guidelines][thesis-guidelines] before you hand in.** See [`build/main.pdf`][sample-pdf] for an example PDF created with this template.
 
 Note: Because of copyright considerations, TUM logos are not included in this template. Unfortunately, the logos are also not available on the MyTUM website anymore.
