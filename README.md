@@ -1,5 +1,5 @@
 # Master's Thesis: Peer Review Verification with Verifiable Credentials and Zero-Knowledge Proofs
-Preview can is accessible [here](https://www.overleaf.com/read/tsnvcmkgqsmh)
+Preview is accessible [here](https://www.overleaf.com/read/tsnvcmkgqsmh)
 
 
 # LaTeX template for TUM theses
