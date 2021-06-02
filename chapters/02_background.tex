@@ -6,6 +6,58 @@ Use with pdfLaTeX and Biber.
 
 \section{Verifiable Credentials}
 
+Verifiable Credentials is a recent W3C standard "to express credentials on the Web in a way that is cryptographically secure, privacy respecting, and machine-verifiable" \parencite{Sporny.18Kas2019}. Any set of claims about a subject can be a credential. In the VC setting these claims create \textit{subject-property-value} relationships that can be expressed in graphs. For instance being graduated from a university can be represented as the graph in Figure \ref{fig:alumniOf}. 
+
+Subjects of claims are not necessarily persons and can be anything. In a peer review context a claim could be \textit{Peer Review-author-John Doe} where the subject is the peer review. Alternatively same relationship can be represented as \textit{John Doe-reviewerOf-Peer Review} where the subject is the person.
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=0.8\textwidth]{claim-example}
+  \caption{Example Subject-Property-Value relationship of a graduation claim \parencite{Sporny.18Kas2019}} \label{fig:alumniOf}
+\end{figure}
+
+Although people usually associate credentials to be issued only by a respected authority such as a state, a university or a hospital, Verifiable Credentials allows anyone to issue claims. Yet, each credential is meaningful in a certain context and depending on the trust relationships between parties. An \textit{alumniOf} claim is only meaningful if issued by a university that is known to the employer in a job application or a \textit{goodHusband} claim only makes sense if issued by a spouse. Verifiers of a credential exchange can choose to accept or reject a credential depending on the real world trust relationships.
+
+A credential is a set of claims, i.e. a graph of information around a subject. Additional to the claims, the metadata and a digital proof form a Verifiable Credential. The proof is generally a digital signature of the claims and metadata, which makes the Verifiable Credential "verifiable".
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=0.4\textwidth]{credential}
+  \includesvg[width=0.8\textwidth]{credential-graph}
+  \caption{Components of a Verifiable Credential and the graph of information of an example credential \parencite{Sporny.18Kas2019}} \label{fig:credentialGraph}
+\end{figure}
+
+The VC specification models the stakeholders and interactions between them as in Figure \ref{fig:ecosystem}. \textit{Issuer}s assert claims and issue credentials about subjects, \textit{Verifier}s verify the credentials presented to them, and \textit{Holder}s aquire, store, and present credentials. Note that the subject of a credential can be different than its holder such as a pet being the subject and its owner being the holder, or a peer review as the subject and the reviewer as the holder. Finally, a \textit{Verifiable Data Registry} acts as the backend of these interactions by maintaining identifiers and schemas. This registry could be a distributed ledger or a central database depending on the implementation.
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=0.8\textwidth]{ecosystem}
+  \caption{Stakeholders of a Verifiable Credentials ecosystem and their roles \parencite{Sporny.18Kas2019}} \label{fig:ecosystem}
+\end{figure}
+
+\subsection{Verifiable Presentations}
+
+The specification also describes an extension to the VC data model that enables the packaging of multiple credentials and verification of the authorship of the data. A Verifiable Presentation consists of one or more Verifiable Credentials, presentation metadata, and a proof which is usually a digital signature of the first two. Credential holders can combine different credentials from different issuers for each use case, and the proof of the presentation provides the means to verify the authorship of data.
+
+\subsection{Syntax}
+
+The data model provided in the VC specification is an abstract representation of the information around a credential. For the exchange of the information a machine readable data exchange format or syntax is required. Popular data exchange formats are XML \parencite{xmlRFC}, JSON \parencite{jsonRFC}, and YAML \parencite{yaml}. Although any syntax can be used, the specification describes JSON and JSON-LD \parencite{jsonld} serializations of the data model. 
+
+The use of linked data through JSON-LD accomplishes several things. First, it  brings linked data properties with minimal changes to JSON, which is widely used in today's web. Second, it makes possible to model complex real world relationships with a graph model. Third, it enables "permissionless innovation" through extensibility. Anyone can extend the existing vocabularies and numerous cryptographic proof formats and signature suites can be used. This is in line with the "open world assumption" approach, that is anyone can assert claims about any subject. It is up to implementers and verifiers to decide based on the real world trust relationships which claims to accept and which entities to trust.
+
 \section{Zero-Knowledge Proofs}
 
+Zero-knowledge proofs of knowledge are protocols in cryptography where a \textit{prover} can cryptographically prove to a \textit{verifier} the validity of statement without sharing any other information than the fact that the statement is true. The field recently received more attention with the implementation of the privacy-preserving digital currency Zcash \parencite{E.BenSasson.2016}. Even though comonnly reffered as zero-knowledge proofs, it is useful to distinguish between \textit{proofs} and \textit{proofs of knowledge}. A proof is sufficient evidence for the truth of a proposition such as a proof for the statement that there exists a three coloring for a specific graph. A proof of knowledge is a proof for the knowledge of a piece of information such as a proof to the statement that I know a three coloring for this specific graph \parencite{green_2017}. 
+
+Properties of zero-knowledge proofs are as follows \parencite{Groth.2010}:
+\begin{itemize}
+  \item \textbf{Completeness:} If the statement is true, the verifier will be convinced by the proof the prover presents that the statement is true
+  \item \textbf{Soundness:} If the statement is false, a malicious prover can't convince the verifier that it is true.
+  \item \textbf{Zero-Knowledge:} If the statement is true, a malicious verifier does not learn anything else than the fact that the statement is true.
+\end{itemize}
+
+The first two properties are also requirements for interactive proofs. The work of \cite{Goldwasser.1985} has first introduced the third property of Zero-Knowledge. A proof in a zero-knowledge proof system is not deterministic but a probabilistic proof. Through many iterations it is possible to decrease the error to practically negligible values. \cite{Goldreich.1991} also show that with the assumption of an unbreakable encryption, it is possible to create a zero-knowledge proof for the graph coloring problem. This is significant since the graph coloring problem is NP-complete and every NP problem can be reduced to an NP-complete problem in polynomial time, meaning every problem in NP has a zero-knowledge proof. These initial zero-knowledge proofs are also interactive, that is the prover and the verifier need to exchange information on each round. This also implies it is not possible to convince a third-party other than the interacting verifier to the correctness of the proof. 
+
+
+However, the initial zk-proofs 
 \section{Related Work}
