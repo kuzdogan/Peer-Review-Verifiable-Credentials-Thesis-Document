@@ -50,7 +50,7 @@
 
 \usepackage[acronym,xindy,toc]{glossaries} % TODO: include "acronym" if glossary and acronym should be separated
 \makeglossaries
-\loadglsentries{pages/glossary.tex} % important update for glossaries, before document
+\input{pages/glossary.tex} % important update for glossaries, before document
 
 
 \bibliography{bibliography}
@@ -86,6 +86,8 @@
 
 % Settings for lstlistings
 
+\input{config/listings}
+
 % Use this for basic highlighting
 \lstset{%
   basicstyle=\ttfamily,
@@ -94,32 +96,6 @@
   keywordstyle=\bfseries\color{TUMBlue},
   stringstyle=\color{TUMAccentGreen}
 }
-
-% use this for C# highlighting
-% %\setmonofont{Consolas} %to be used with XeLaTeX or LuaLaTeX
-% \definecolor{bluekeywords}{rgb}{0,0,1}
-% \definecolor{greencomments}{rgb}{0,0.5,0}
-% \definecolor{redstrings}{rgb}{0.64,0.08,0.08}
-% \definecolor{xmlcomments}{rgb}{0.5,0.5,0.5}
-% \definecolor{types}{rgb}{0.17,0.57,0.68}
-
-% \lstset{language=[Sharp]C,
-% captionpos=b,
-% %numbers=left, % numbering
-% %numberstyle=\tiny, % small row numbers
-% frame=lines, % above and underneath of listings is a line
-% showspaces=false,
-% showtabs=false,
-% breaklines=true,
-% showstringspaces=false,
-% breakatwhitespace=true,
-% escapeinside={(*@}{@*)},
-% commentstyle=\color{greencomments},
-% morekeywords={partial, var, value, get, set},
-% keywordstyle=\color{bluekeywords},
-% stringstyle=\color{redstrings},
-% basicstyle=\ttfamily\small,
-% }
 
 % Settings for search order of pictures
 \graphicspath{
