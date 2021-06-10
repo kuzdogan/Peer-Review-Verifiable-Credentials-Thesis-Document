@@ -31,6 +31,23 @@ Here the requirements are listed together once again.
 
 \section{Design}
 
+%% TODO: Why I choose JSON-LD over JWT see https://www.w3.org/TR/vc-imp-guide and Kaliya Young's doc
+% "The relying party (verifier) is left guessing about the meaning, and if they don’t want to guess, they must find an out-of-band way to connect back to the issuer to figure out the meaning."
+
+% Why is the review the subject
+% Because it is "the" credential. We make a Peer Review Credential. A peer review authorship credential is trivial.
+
+% We don't care how the credential is transferred. g DIDComm, pairwise connection using JWT, SIOP CHAPI etc.
+
+% No VP
+
+% Normally holders have wallets
+
+
+%% Why I choose did:web
+% - A journal creating a new DID and posting it to blockchain still does not give it the identity. How do we know did:ethr:0x231...32df is actually the JournalX. Now the journal may share they own this did in many places, including their website. But still this process has to be manual, such as a verifier keeps a list of trusted dids and whom they belong to. Instead, we can directly use did:web. Leverages the X509 identities, and human readable dids. Losing availability, and some privacy preserving since unless cached the did will be accessed each time a verification is made.
+
+
 \subsection{Overview}
 
 We choose to base our design on W3C's Verifiable Credentials specification \parencite{Sporny.18Kas2019}. The specification inherently satisfies some of the requirements of our systems. It is verifiable..... Also, there exist open source libraries that can be used in implementation.
