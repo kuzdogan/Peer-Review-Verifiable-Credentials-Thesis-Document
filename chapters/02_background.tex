@@ -138,6 +138,30 @@ This encryption scheme can also be used to create digital signatures. Apart from
 %% Two aspects: signature scheme and key generation (curve)
 
 \subsection{Linked Data Proofs}
+
+Digital signatures can be used to ensure the authenticity and the integrity of linked data, in particular of verifiable credentials. For a verifiable credential to be "verifiable", it has to contain a \lstinline{proof} property which is a digital signature over the contents of the credential. The data model is designed to be proof format agnostic but two implementations are widely used as proof formats and are explained in the specification. One of them is \acrshort{JWT}s which is also one of the syntaxes. The other one is the Linked Data Proofs \parencite{ldproofs} and used widely with the \acrshort{JSON-LD} syntax. 
+
+A Linked Data Proof not only tells the verifiers how to verify a document, but also provides additional meta-data such as when the signature is created and what the purpose of the signature is. Again, the vocabulary is included in the document in a \lstinline{@context} entry and using this shared vocabulary i.e. a shared understanding of how to do a verification and what the signature stands for, the parties of a credential exchange can communicate unambiguously. With that, anyone can create a signature suite and a corresponding vocabulary that can be used in verifiable credentials. The original \acrshort{VC} context\footnote{https://www.w3.org/2018/credentials/v1} already contains some cryptographic suites. A security vocabulary is also available under W3C Credentials Community Group\footnote{https://w3c-ccg.github.io/security-vocab/}. Additional methods can be specified in the Linked Data Cryptographic Suite Registry\footnote{https://w3c-ccg.github.io/ld-cryptosuite-registry/}.
+
+A Linked Data Proof has the following properties required \parencite{ldproofs}:
+
+\begin{itemize}
+    \item \textbf{type:} the name of the cryptographic suite used in the proof such as \lstinline{RsaSignature2018}, \lstinline{BbsBlsSignature2020}
+    \item \textbf{proofPurpose:} expresses why a proof is created. Avoids the unintended use of the proof such as a verifiable credential proof (\lstinline{assertionMethod}) being used for authentication (\lstinline{authentication})
+    \item \textbf{verificationMethod:} expresses how to verify the proof. Usually an identifier resolves to a document containing the keys used for the signature.
+    \item \textbf{created:} when the proof is created
+    \item \textbf{signature value:} a string representation of the signature created. The key can be \lstinline{jws}, \lstinline{proofValue} etc.
+\end{itemize}
+
+It may also contain other values such as a \lstinline{nonce} or a \lstinline{domain}.
+
+Even though digital signatures ensure the integrity of credentials, they also prevent selective disclosure. A signature is only valid over the whole of the credential and therefore it is not possible to share only some parts of it verifiably. Selective disclosure is a desired property for the minimization of personal data, which is a common principle in privacy regulations such as \acrshort{GDPR} \parencite{gdpr, langheinrich_2001}.
+
+There are several ways to achieve data minimization \parencite{Helmy.8May2020}. One way is to contact the issuer each time during the verification and request the required attributes securely. This, called \textit{just in time issuance}, is how information exchange is done through current federated identity providers such as a Google or Facebook log in. Another method is to introduce a trusted third party acting as a \textit{trusted witness}. Publons, in a way acts a trusted witness for the peer reviews and provides review data to parties when needed. Also, it is possible to achieve selective disclosure \textit{cryptographically}. 
+
+Using cryptographical methods, there are also several ways selective disclosure may be achieved. An issuer can issue a separate credential for each of the attributes of the combined credential as \textit{atomic credentials}, which allows the holder to present the required attributes \parencite{Chadwick.2019}. It is also possible to use \textit{hashed values} in the credential. A holder may then provide the pre-images of the hashed values which they want to disclose to the verifier without having to share all the fields \parencite[961]{R.Mukta.2020}. Similarly, instead of storing the hash of the credential, a \textit{Merkle tree} of fields can be stored. A holder can present values of the desired attributes and the required hashes in the Merkle tree to enable verification of the disclosed attributes \parencite{Hitchens.9Eyl2018}. Finally, there exist digital signatures that support \textit{\acrfull{zk-proofs}} and the selective disclosure of the attributes such as Camenish-Lysyanskaya \parencite{camenisch2002signature}, and BBS+ signatures \parencite{boneh2004short, camenisch2016anonymous, lodder_looker_2020}.
+
+
 \subsection{Zero-Knowledge Proofs}
 
 Zero-knowledge proofs of knowledge are protocols in cryptography where a \textit{prover} can cryptographically prove to a \textit{verifier} the validity of statement without sharing any other information than the fact that the statement is true. The field recently received more attention with the implementation of the privacy-preserving digital currency Zcash \parencite{E.BenSasson.2016}. Even though commonly referred as zero-knowledge proofs, it is useful to distinguish between \textit{proofs} and \textit{proofs of knowledge}. A proof is sufficient evidence for the truth of a proposition such as a proof for the statement that there exists a three coloring for a specific graph. A proof of knowledge is a proof for the knowledge of a piece of information such as a proof to the statement that I know a three coloring for this specific graph \parencite{green_2017}. 
@@ -153,4 +177,61 @@ The first two properties are also requirements for interactive proofs. The work 
 
 These initial zero-knowledge proofs are also interactive, that is the prover and the verifier need to exchange information on each round. Each time the a proofs needs to be made, the prover and the verifier need to be online and interact in multiple rounds, which makes the usability of the protocol difficult. Also, since the soundness of the proof relies on the randomness of the challenges of the verifier on each round, a third-party can not be convinced by such a proof. By looking at the protocol transcript and the proof, they can't be assured if this randomness holds. \cite{Blum.1988} have shown that with a common reference string shared by the prover and the verifier, it is possible to create non-interactive zero-knowledge proofs. The common reference string need not be private, which makes non-interactive zero-knowledge proofs more practical than interactive ones.
 
+
+\section{Decentralized Identifiers}
+
+\acrfull{DID}s \parencite{reed_sporny_longley_allen_grant_sabadello_2021} are a new type of globally unique identifiers that don't depend on centralized identity providers or registries, and give their users full control of their identity. \acrshort{DID}s follow the \acrshort{URI} syntax with a \lstinline{did:} scheme followed by a method and the method specific identifier. Some examples of \acrshort{DID}s are given in Listing \ref{lst:did-example}.
+
+\begin{lstlisting}[label={lst:did-example}, caption={\acrlong{DID} examples}]
+did:example:123456789abcdefghi
+did:example:123456789abcdefghi#key-1
+did:example:123456789abcdefghi?versionTime=2021-05-10T17:00:00Z
+// Ethereum 
+did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a
+// Sovrin
+did:sov:mnjkl98uipsndg2hdjdjuf7
+// Public-key embedded DID
+did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH
+// Web
+did:web:example.com
+\end{lstlisting}
+
+Each \acrshort{DID} resolves to a \acrshort{DID} document, similar to how \lstinline{http://www.example.com} resolves to an HTML file. Different methods have different resolvers and may have their own internal way of creating method specific identifiers. A \acrshort{DID} document describes the meta-data associated with the object it identifies in a \acrshort{JSON-LD} format. This may include the public keys associated, the controller of the document, the services and the service endpoints available for the described object etc. The \acrshort{DID} \lstinline{did:example:123456789abcdefghi} may resolve to the following document in Listing \ref{lst:did-doc-example} which describes two public keys assoicated with it for verification purposes, and one for authentication. It also expresses that this object is controlled by the \acrshort{DID} \lstinline{did:example:bcehfew7h32f32h7af3}, and a service associated with it. This may for instance be an identifier for an \acrshort{IoT} device with an \lstinline{EncryptedDataVault} owned by a user identified with \lstinline{did:example:bcehfew7h32f32h7af3}.
+
+\begin{lstlisting}[language=json, label={lst:did-doc-example}, caption={Example\acrlong{DID} document \parencite{reed_sporny_longley_allen_grant_sabadello_2021}}]
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/ed25519-2020/v1"
+  ]
+  "id": "did:example:123456789abcdefghi",
+  "controller": "did:example:bcehfew7h32f32h7af3",
+  "verificationMethod": [{
+      "id": "did:example:123456789abcdefghi#key-1",
+      "type": "Ed25519VerificationKey2020", 
+      "controller": "did:example:123456789abcdefghi",
+      "publicKeyMultibase": "zH3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
+    }, 
+    {
+      "id": "did:example:123456789abcdefghi#key-2",
+      "type": "Ed25519VerificationKey2020", 
+      "controller": "did:example:123456789abcdefghi",
+      "publicKeyMultibase": "Zpfs4h2fkcJCwDNam3uVAjZpwnZn6z3wXmo91LvLMv6A"
+    }
+  ],
+  "authentication": [
+    "#key-1"
+  ],
+  "service": [{
+    "id": "did:example:123456789abcdefghi#vault",
+    "type": "EncryptedDataVault",
+    "serviceEndpoint": "https://edv.example.com/"
+  }]
+}
+\end{lstlisting}
+
+\acrshort{DID}s and \acrshort{VC}s are both part of the \acrfull{SSI} ecosystem. Still, both specifications are separate and do not depend on each other. Since \acrshort{DID}s are \acrshort{URI}s, they can be used in the fields that are required to be \acrshort{URI}s in verifiable credentials. This includes \lstinline{id} fields, \lstinline{issuer}, \lstinline{verificationMethod}. Using \acrshort{DID}s in \lstinline{issuer} and \lstinline{verificationMethod} leverages the public keys associated with \acrshort{DID}s and the verification can be done using the keys associated.
+
 \section{Related Work}
+
+The problems in peer review caught the attention of scientists. Besides the descriptive literature on peer review’s shortcomings, a variety of works discussed and prescribed solutions to the incentive problem. An often encountered suggestion is to ask researchers to do sufficient reviews to balance the system, usually 3 reviews per paper, a “quid pro quo” (\cite{Derraik.2015}, \cite[5201]{Grainger.2007}). To maintain the timeliness of the process \cite{Hauser.2007} suggest a punishment for reviewers who return their reviews late and a reward for the ones returning on time. \cite{Ferreira.2016} suggest making peer review mandatory and paying the reviewers and calls for a decoupling of the peer review system from the scientific publishing by founding a Global Peer Review Platform. Direct monetary compensation of reviewers was also suggested many times \parencite{Prufer.2010}. \cite{Fox.2010} suggest a credit system where authors have to pay for their submissions and earn by conducting reviews, effectively “privatizing the reviewer commons”. Others proposed crypto-economic models through peer review tokens on a blockchain that will work as credits for peer reviews or as reputation indicators \parencite{Avital.2018, Jan.2018c, Spearpoint.2017, Tarkhanov.2020}. Also using a blockchain-based token and lotteries \cite{Janowicz.2018} provide a model for how integrating distributed ledger technologies could benefit the Semantic Web journal’s processes. \cite{TenorioFornes.2019} suggest a whole publishing system that is decentralized using Ethereum and IPFS. Ants-Review suggests an Ethereum based incentive system with its native token ANTS that allows bounties for open anonymous peer reviews \parencite{TrovoMassari}.

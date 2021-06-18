@@ -50,7 +50,7 @@ Here the requirements are listed together once again.
 
 \subsection{Overview}
 
-We choose to base our design on W3C's Verifiable Credentials specification \parencite{Sporny.18Kas2019}. The specification inherently satisfies some of the requirements of our systems. It is verifiable..... Also, there exist open source libraries that can be used in implementation.
+We choose to base our design on W3C's Verifiable Credentials specification \parencite{Sporny.18Kas2019}. The specification inherently satisfies some of the requirements of our system. It is verifiable..... Also, there exist open source libraries that can be used in implementation.
 
 The designed system has two main components:
 
@@ -59,7 +59,7 @@ The designed system has two main components:
     \item \textbf{Veriview:} A peer review showcase platform that supports VCs
 \end{enumerate}
 
-In a typical peer review process, a researcher receives an invitation to peer review from the editor of the journal. Here, upon receiving an invitation from Journal X, the author researcher accepts it and submits the review of the manuscript to Journal X. Then she can request the proof of their work as a peer review verifiable credential. Journal X prepares the credential and issues it by signing. The review author can use this credential to prove their authorship. This can be a private exchange with an employer or a colleague. In our system we also conceive a peer review showcase platform called Veriview, where review authors can build their "peer review resume". According to the privacy policy of the review, they can decide which information about the review to share publicly.
+In a typical peer review process, a researcher receives an invitation to peer review from the editor of the journal. Here, upon receiving an invitation from Journal X, the reviewer accepts it and submits the review of the manuscript to Journal X. Then she can request the proof of their work as a peer review verifiable credential. Journal X prepares the credential and issues it by signing. The review author can use this credential to prove their authorship.  In our system we also conceive a peer review showcase platform called Veriview, where review authors can build their "peer review resume". According to the privacy policy of the review, they can decide which information about the review to share publicly.
 
 An overview of the interactions of the typical use case on the system are depicted below in Figure \ref{fig:sequence1} 
 
@@ -73,7 +73,7 @@ Additionally we assume a "Review Data Consumer", a party which is interested in 
 
 The use case depicted in Figure \ref{fig:sequence1} assumes the reviews are shared publicly and are not open reviews. Since Veriview is a platform to share peer reviews publicly, the review author will choose which attributes they want to and are able to share, and derive a credential containing the selected attributes and a zero-knowledge proof which can be shared in Veriview. 
 
-In a private setting or for an open review this additional derivation step is not required. For instance, if the researcher wants to show their review in a grant application, they might want to share the reference to the manuscript and the contents of the review. If the manuscript is in the scientific field the researcher wants to show competence in, being able to verifiably show that they were invited and done a review in this field  would demonstrate the researchers competence. Also, other factors such as the journal's reputation provide additional information. In this case Veriview is not required and the interactions are as in Figure \ref{fig:sequencePrivate}.
+In a private setting or for an open review this additional derivation step is not required. For instance, if the researcher wants to include their review in a grant application, they might want to share the reviewed manuscript and the contents of the review. If the manuscript is in the scientific field the researcher wants to show competence in, being able to verifiably show that they were invited and done a review in this field  would demonstrate the researchers competence. Also, other factors such as the journal's reputation provide additional information. In this case Veriview is not required and the interactions are as in Figure \ref{fig:sequencePrivate}.
 
 \begin{figure}[htpb]
   \centering
@@ -85,31 +85,69 @@ In a private setting or for an open review this additional derivation step is no
 
 The Peer Review Credential is a document issued by a journal that a peer review has been done for this journal. The document contains the review content and the metadata associated such as the date, title, author etc. An example credential is given below in Listing \ref{lst:exampleReview}
 
+%% TODO: Change peer review with one with manuscript field
 \lstinputlisting[language=json, caption={Example Peer Review Credential},label={lst:exampleReview}]{code/exampleReviewCredential.json}
 
-The credential in this design follows the JSON-LD syntax. JSON-LD is the preferred format used as the VC specification and many of the VC libraries available are JSON-LD based. 
+The credential in this design follows the \acrshort{JSON-LD} syntax. \acrshort{JSON-LD} is the predominantly used format in the \acrshort{VC} specification and many of the \acrshort{VC} libraries available are \acrshort{JSON-LD} based. \acrshort{JSON-LD}s with Linked Proofs supports Zero-Knowledge Proof formats and \acrshort{JSON-LD}s require canonicalization, which allows flexibility in the order of the attributes. This becomes useful for instance when transferring the credential from the journal to the author, the journal don't have to worry about the order of the attributes when they issue the credential. Also, being fully compatible with \acrshort{JSON}, the format easily integrates with existing web frameworks.
 
-\lstinline{@context} defines the vocabularies used in the document. The first URL refers to the VC context and it is required to be included in all verifiable credentials according to the specification. The second context contains the vocabulary for peer reviews. We also provide a vocabulary for our system specific for the peer reviews, but any vocabulary can be used. Thanks to the extensibility of Verifiable Credentials, it possible to extend the vocabulary itself, or include other vocabularies in the document. For instance, if the peer review process of a journal has a statistical soundness check, this can be represented as a \lstinline{statisticallySound} field defined in another vocabulary. Although, it is important these vocabularies are accepted by the ecosystem to maintain the interoperability. Finally, \lstinline{https://w3id.org/security/bbs/v1} provides the vocabulary for the \lstinline{BbsBlsSignature} since it is not included in the default \lstinline{https://www.w3.org/2018/credentials/v1} context.
+\subsubsection{Context}
+
+\lstinline{@context} defines the vocabularies used in the document. The first URL refers to the VC context and it is required to be included in all verifiable credentials according to the specification. The second context contains the vocabulary for peer reviews. We also provide a vocabulary for our system specific for the peer reviews, but any vocabulary can be used. The context used in this document is given in Listing \ref{lst:peer-review-context}
+
+\lstinputlisting[language=json, caption={Peer Review Vocabulary},label={lst:peer-review-context}]{code/peerReviewContext.json}
+
+
+Thanks to the extensibility of Verifiable Credentials, it possible to extend the vocabulary itself, or include other vocabularies in the document. For instance, if the peer review process of a journal has a statistical soundness check, this can be represented as a \lstinline{statisticallySound} field defined in another vocabulary. Ideally, these vocabularies will be defined with different stakeholders of the peer review ecosystem coming together, that they will be widely accepted and used.
+
+Finally, \lstinline{https://w3id.org/security/bbs/v1} provides the vocabulary for the \lstinline{BbsBlsSignature} since it is not included in the default \lstinline{https://www.w3.org/2018/credentials/v1} context.
+
+\subsubsection{Signatures}
+
+We choose BBS+ signatures with a BLS12-381 curve as expressed by the \lstinline{BbsBlsSignatureProof2020} type in the \lstinline{proof} field. BBS+ signatures is the preferred signature scheme while BLS12-381 is the curve used for generating the keys. BBS+ signatures can be used with any pairing friendly curve \parencite{irtf-cfrg-pairing-friendly-curves-09}, but since the existing Linked Data Proof signature suite \parencite{looker_steele_2021} and the implementations\footnote{https://github.com/mattrglobal/bbs-signatures-spec} are based on BLS12-381 curves, we choose adopt the same curve. This signature suite allows zero-knowledge selective disclosure of attributes with more efficient size\footnote{https://medium.com/mattr-global/a-solution-for-privacy-preserving-verifiable-credentials-f1650aa16093} and execution times\footnote{https://www.evernym.com/blog/bbs-verifiable-credentials/} compared to the existing ones such as \acrshort{CL} signatures.
 
 \subsubsection{Decentralized Identifiers}
 
-Decentralized Identifiers and Verifiable Credentials are both part of the Self-Sovereign Identity ecosystem. Still, both specifications are separate and do not depend on each other. 
+The \acrshort{VC} specification describes several attributes to be identifiers (i.e. \acrshort{URI}s). Apart from uniquely identifying the described object, these fields may also be used for authentication. In the case of \lstinline{issuer}, the value of the attribute is recommended to resolve to a document that can be used to verify the credential. The document would contain the public key information of the signer key, and other meta-data related to the issuer.
 
-Since DIDs are URLs, they can be used in the fields that require to be URLs in VCs. This includes \lstinline{id} fields, \lstinline{issuer}, \lstinline{verificationMethod}. Using DIDs in \lstinline{issuer} and \lstinline{verificationMethod} leverages the public keys associated with DIDs.
+In this work, the issuer field is a \acrshort{DID} of the journal. Although it is possible to use a \acrshort{HTTP} \acrshort{URL}, we use \acrshort{DID}s for their articulacy and their close relationship with \acrshort{VC}s in the \acrshort{SSI} ecosystem. Using a \acrshort{DLT} based \acrshort{DID} method would provide the document a high availability and tamper-proofness, for instance \lstinline{did:sov:mnjkl98uipsndg2hdjdjuf7}. However, it would be necessary to bind this \acrshort{DID} with the real world identity of the journal. By looking at the identifier \lstinline{did:sov:mnjkl98uipsndg2hdjdjuf7}, a third-party is not able to infer that this is the identity associated with Journal X. In that case, Journal X needs to announce in different channels that the identifier \lstinline{did:sov:mnjkl98uipsndg2hdjdjuf7} belongs to them. This may be in a non-digital communication or by announcing the identifiers on the journal website. An alternative in the \acrshort{DID} space is to create accreditation registries. Similar to accreditation in real world, a third party or a joint organization can keep a registry of vouched identities, and can provide the necessary trust.
 
+Here, \lstinline{did:web} is the preffered \acrshort{DID} method used. Compared to a \acrshort{DLT} method this would require the server of the document to be highly available and the controller of the server may change the file anytime. The advantage is that this method piggybacks on the identity of the journal's host address. The website of journals are usually well known and can serve as a valid identifier thanks to the existing public key infrastructure. It is also human readable, and there exist implementations of \lstinline{did:web} resolvers. To have a \acrshort{DID} document resolved from its identifier, a host can serve it under the path \lstinline{https://<HOST-NAME>/.well-known/did.json}. 
+
+%% TODO: Display the DID document in prototype
 
 \subsection{Peer Review Credential Issuance}
 
+Once a reviewer accepts and submits their review, they can request a peer review credential from the journal. At this step, the journal may decide not to issue the credential, if, for instance, the decision to publish the manuscript or not is not given, or the paper is not published yet. During implementation, this process can be layered on top of the existing journal management systems. There exist many journal management system handling the publication process, including the peer review. These systems have their databases and sometimes APIs working. A working peer review credential module would only need to access this data of each user, pack them together in proper format, sign, and issue the credential. 
+
+Once issued the reviewer stores these credentials in their wallet. 
 
 \subsection{Peer Review Credential Verification}
 
+%% TODO Make "Validate Credential" --> "Verify Credential" on the diagram
+
+To verify the full credential, a verifier needs to first decide it they trust the issuer of the credential. In our case, this is the web domain of the journal. Then the \acrshort{URI} of the issuer will be resolved and the associated public keys will be retrieved. 
+
+The verifier next checks the vocabularies used in the document. 
 
 \subsection{Peer Review Credential Derivation}
 
+Credential derivation is the key functionality of the system. Ideally, this step is executed by the holder's wallet and the original credential does not leave the wallet. If the wallet supports the signature scheme the credential is issued in, the user would select the attributes of the peer review they would like to disclose. 
 
 \subsection{Derived Credential Verification}
 
 \subsection{The Role of Distributed Ledgers}
+
+Distributed ledgers are widely used in the \acrshort{SSI} implementations 
+%% TODO: properties of DLT for using in SSI
+However, due to their publicity and immutability, no personal data should reside on public blockchains. 
+
+As of what goes onto a blockchain in such a credentials system, there are two things. 
+
+First, the contexts and schemas would benefit from high availability and the immutability of blockchains. These documents should not be changed (without versioning) and therefore the immutable distributed ledgers are a natural choice. Alternatively, content addressed storages such as IPFS can be used to ensure immutability of files. Additionally, hosting contexts and schemas on a public ledger enhances the privacy as the verifier would not contact the issuer when verifying, and the issuer will not be able to correlate different requests. For the current use case, however, this is not a major concern. 
+
+Second, the identities and their associated keys can be stored on blockchains.
+%% TODO: Refer to DPKI paper of Vitalik, Allen etc.
+Decentralized identifiers. 
 
 \subsection{Evaluation of Requirements}
 
