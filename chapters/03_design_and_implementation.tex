@@ -1,13 +1,11 @@
 % !TeX root = ../main.tex
 % Add the above to each chapter to make compiling the PDF easier in some editors.
 
-\chapter{Design and Implementation}\label{chapter:design}
+\chapter{Design \& Implementation}\label{chapter:design}
 
-The goal of this work is to design a system that will allow the verification of closed peer reviews without a trusted third party. The new artifact should improve upon the existing ones, which are the current peer review showcase platforms. Based on the problems identified, the requirements of such a system is defined in the following section. Taking these requirements and available technologies into account, a design of system will be communicated. Additionally, the implemented proof of concept prototype will be demonstrated.
+The goal of this work is to design a system that will allow the verification of closed peer reviews without a trusted third party. The new artifact should improve upon the existing ones, which are the current peer review showcase platforms. Based on the problems identified, the requirements of such a system is defined in the following section. Taking these requirements and available technologies into account, a design of a system will be communicated. Additionally, the implemented proof of concept prototype will be demonstrated.
 
 \section{Requirements} \label{sec:requirements}
-
-Following the open science principles, this information should be as transparent and accessible as possible. However, the anonymous nature of the review process does not allow this. 
 
 As stated in the problem statement, current lack of recognition of peer reviews stems from the public unavailability of the closed peer reviews. Each individual party presented with the peer reviews of a researcher needs to explicitly contact each journal if they want to verify the peer reviews. This is clearly infeasible in a public setting: if a researcher has their peer reviews stated in a public profile, e.g. on their website, each party consuming this data has to contact the journals. This is not the case for other scholarly works such as manuscripts. Therefore, it should be easy to check if the peer review is authentic, that is, the peer reviews are \textbf{verifiable}.
 
@@ -42,13 +40,13 @@ Here the requirements are listed together once again.
 
 \subsection{Overview}
 
-We choose to base our design on W3C's Verifiable Credentials specification \parencite{Sporny.18Kas2019}. The specification inherently satisfies some of the requirements of our system. It is verifiable, based on open standards, and built with an open world assumption, that is, anyone can extend the existing vocabularies and can issue credentials. Also, there exist open source \acrshort{VC} libraries that can be used in the implementation.
+We choose to base our design on W3C's Verifiable Credentials specification \parencite{Sporny.18Kas2019}. The specification inherently satisfies some of the requirements of our system. It is verifiable \hyperref[rq:verifiable]{(RQ1)}, based on open standards \hyperref[rq:open-standards]{(RQ4)}, and built with an open world assumption, that is, anyone can extend the existing vocabularies and can issue credentials \hyperref[rq:compatible]{(RQ7)}. Also, there exist open source \acrshort{VC} libraries that can be used in the implementation.
 
 The designed system has two main components:
 
 \begin{enumerate}
     \item \textbf{Journal X:} A hypothetical journal that issues peer review credentials
-    \item \textbf{Veriview:} A peer review showcase platform that supports VC
+    \item \textbf{Veriview:} An open source peer review showcase platform that supports peer review \acrshort{VC}s
 \end{enumerate}
 
 
@@ -62,9 +60,9 @@ In a typical peer review process, a researcher receives an invitation to do a pe
 
 In practice, there supposed to be many journals and Journal X is one example out of numerous journals. Also Veriview is not a single platform but there may be many showcasing platforms that researchers can choose to build their profiles at. Having a system based on open standards \hyperref[rq:open-standards]{(RQ4)} allows anyone to create a platform similar to Veriview and this would avoid vendor lock-in. 
 
-Additionally we assume a "Review Data Consumer", a party which is interested in the peer review data of a reviewer. In real world these might be employers, universities, research institutions, or other researchers. Any party that is interested in the peer reviews of a researcher, and their authenticity, might be a consumer. 
+Additionally we assume a "Review Data Consumer", a party which is interested in the peer review data of a reviewer. In real world these might be employers, universities, research institutions, or other researchers. This can also be other applications that want to make use of the peer review contributions of researchers. For example, a peer review matching application that would suggest potential reviewers to editors or platforms aiming to incentivize reviewers \parencite{TenorioFornes.2019, Jan.2018c, TrovoMassari} with rewards can make use of this open data \hyperref[rq:open-data]{(RQ3)}.  Any party that is interested in the peer reviews of a researcher, and their authenticity, might be a consumer. 
 
-The use case depicted in Figure \ref{fig:sequence1} assumes the reviews are shared publicly and are not open reviews. Since Veriview is a platform to share peer reviews publicly, the review author will choose which attributes they want to and are able to share, and derive a credential containing the selected attributes and a zero-knowledge proof which can be shared in Veriview. 
+The use case depicted in Figure \ref{fig:sequence1} assumes the reviews are shared publicly and are not open reviews. Open reviews would not require additional derivation as all of the review data can be shared publicly and they are verifiable themselves where they are published. Since Veriview is a platform to share blinded peer reviews publicly, the review author will choose which attributes they want to and are able to share, and derive a credential containing the selected attributes and a zero-knowledge proof which can be shared in Veriview. 
 
 In a private setting or for an open review this additional derivation step is not required. For instance, if the researcher wants to include their review in a grant application, they might want to share the reviewed manuscript and the contents of the review. If the manuscript is in the scientific field the researcher wants to show competence in, being able to verifiably show that they were invited and done a review in this field  would demonstrate the researcher's competence. Also, other factors such as the journal's reputation provide additional information. In this case Veriview is not required and the interactions are as in Figure \ref{fig:sequencePrivate}.
 
@@ -86,7 +84,7 @@ The credential is designed to represent the review as the subject. Under the \ls
 
 \subsubsection{Context}
 
-\lstinline{@context} defines the vocabularies used in the document. The first \acrshort{URL} refers to the \acrshort{VC} context and it is required to be included in all verifiable credentials according to the specification. The second context contains the vocabulary for peer reviews. Finally, \lstinline{https://w3id.org/security/bbs/v1} provides the vocabulary for the \lstinline{BbsBlsSignature} signature suite since it is not included in the default \lstinline{https://www.w3.org/2018/credentials/v1} context. We also provide a vocabulary for our system specific for the peer reviews. The context used in this document is given in Listing \ref{lst:peer-review-context}
+\lstinline{@context} defines the vocabularies used in the document. The first \acrshort{URL} refers to the \acrshort{VC} context and it is required to be included in all verifiable credentials according to the specification. The second context contains the vocabulary specific for peer reviews which we define. Finally, \lstinline{https://w3id.org/security/bbs/v1} provides the vocabulary for the \lstinline{BbsBlsSignature} signature suite since it is not included in the default \lstinline{https://www.w3.org/2018/credentials/v1} context. The context used in this document is given in Listing \ref{lst:peer-review-context}
 
 \lstinputlisting[language=json, caption={Peer Review Vocabulary},label={lst:peer-review-context}]{code/peerReviewContext.json}
 
@@ -138,7 +136,7 @@ Using a \acrshort{DLT} based \acrshort{DID} method would provide the document a 
 
 Here, \lstinline{did:web}\footnote{https://w3c-ccg.github.io/did-method-web/} is the preffered \acrshort{DID} method used for the \lstinline{issuer} field. Compared to a \acrshort{DLT} method this would require the server of the \acrshort{DID} document to be highly available and the controller of the server may change the file without others noticing. The advantage is that this method makes use of the identity provided by the journal's host address (e.g. https://www.journalx.com) and its X.509 certificate \parencite{Barclay.6Nis2020}. The website of journals are usually known and can serve as a valid identifier thanks to the existing public key infrastructure. It is also human readable, and there exist implementations of \lstinline{did:web} resolvers. To have a \acrshort{DID} document resolved from its identifier, a host can serve it under the well-known path \parencite{rfc5785} \lstinline{https://<HOST-NAME>/.well-known/did.json}. 
 
-Also, as the \lstinline{author} identifier a \acrshort{DID} can be used. By resolving the \acrshort{DID} to a \acrshort{DID} document, the authentication of the holder can be done. In our case, that the party presenting the credentials (holder) are actually the author stated in the \lstinline{author} field. The example in Listing \ref{lst:exampleReview} contains a \lstinline{did:key} \parencite{did-key} \acrshort{DID} that has its the Multibase format \parencite{multiformats-multibase-03} of its public key as the identifier and simply expands to a document containing the same public key used for different verification methods. It is also possible to use different \acrshort{DID}s such as a \acrshort{DLT} based one.
+Also, as the \lstinline{author} identifier a \acrshort{DID} can be used. The example credential in Listing \ref{lst:exampleReview} contains a \lstinline{did:key} \parencite{did-key} \acrshort{DID} that has its the Multibase format \parencite{multiformats-multibase-03} of its public key as the identifier and simply expands to a document containing the same public key used for different verification methods. It is also possible to use different \acrshort{DID}s such as a \acrshort{DLT} based one. By resolving the \acrshort{DID} to a \acrshort{DID} document, the authentication of the holder can be done. In our case, it will enable authenticating that the party presenting the credentials (holder) are actually the author stated in the \lstinline{author} field. This can be done by wrapping the credentials in a verifiable presentation. In theory any identifier field can be a \acrshort{DID} but this comes at the cost and effort of the management of the identity and the keys.
 
 \lstinputlisting[language=json, caption={DID document corresponding to the \acrshort{DID} \lstinline{did:key:z6MkpTHR8VNsBxYAAWHut2Geadd9jSwuBV8xRoAnwWsdvktH} \parencite{did-key}},label={lst:did-key}]{code/did-key.json}
 
@@ -164,7 +162,7 @@ Upon storing the credential, the holder can share these credentials. The \lstinl
 \begin{tabular}{m{10em} | m{10em} | m{18em} }
 \multicolumn{1}{c}{\textbf{Steps}} & \multicolumn{1}{c}{\textbf{}} & \multicolumn{1}{c}{\textbf{Methods}} \\ 
 \hline
-Holder authentication & Credentials are being presented by their intended holder. & Check if the identity of the creator of the presentation match with the identities of the intended holder of the credentials. \\ 
+Presenter authentication & Credentials are being presented by their intended holder. & Check if the identity of the creator of the presentation match with the identities of the intended holder of the credentials. \\ 
 \hline
 Holder check & The holder is already known and trusted. & Check if the holder identifier is whitelisted. \\ 
 \hline
@@ -180,7 +178,7 @@ Revocation check & The credential has not been revoked. & Check the credential i
 
 Verification of credentials in the private case will have the following steps:
 \begin{itemize}
-    \item \textbf{Holder authentication:} All \lstinline{author} \acrshort{DID}s of review credentials match the \acrshort{DID} in the \lstinline{verificationMethod} of the wrapper presentation's \lstinline{proof}.
+    \item \textbf{Presenter authentication:} All \lstinline{author} \acrshort{DID}s of review credentials match the \acrshort{DID} in the \lstinline{verificationMethod} of the wrapper presentation's \lstinline{proof}.
     
     \item \textbf{Holder check}: Make sure the presenter \acrshort{DID} actually belongs to the researcher that review consumer wants to verify. This can be done through an external attestation, for instance a verifiable credential from the research institute of the reviewer that they work there, or by the review consumer's own means such as an email-password authentication. 
     
@@ -201,23 +199,23 @@ Verification on Veriview is similar to the private case, but the verification st
 
     \item \textbf{Credential verification:} Check if the review credential is signed by the associated public key of the issuer \acrshort{DID}.
     
-    \item \textbf{Holder authentication:} Find the verifiable presentation where the review credential is embedded. Verify that the \acrshort{DID} of the credential match the \acrshort{DID} in the \lstinline{verificationMethod} of the wrapper presentation's \lstinline{proof}.
+    \item \textbf{Presenter authentication:} Find the verifiable presentation where the review credential is embedded. Verify that the author \acrshort{DID} in the credential match the \acrshort{DID} in the \lstinline{verificationMethod} of the wrapper presentation's \lstinline{proof}.
     
-    \item \textbf{Presentation verification:} Check that the presentation was signed by a key associated with the \acrshort{DID} in the \lstinline{verificationMethod}.
+    \item \textbf{Presentation verification:} Check that the presentation was signed by a key associated with the \acrshort{DID} in the presentation \lstinline{verificationMethod}.
 
 \end{itemize}
 
-The steps above can be completed by the Veriview application and the results of the verification can be communicated to the user on the application interface. This requires a degree of trust to the Veriview application, but by open sourcing the application and allowing users to download the credentials and presentations, and verifying themselves, the required trust can be minimized. 
+The steps above can be completed by the Veriview application and the results of the verification can be communicated to the user on the application interface. This requires a degree of trust to the Veriview application, but by open sourcing \hyperref[rq:transparent]{(RQ2)} the application and allowing users to download the credentials and presentations, and verifying themselves, the required trust can be minimized \hyperref[rq:direct-trust]{(RQ5)}. 
 
-The \textbf{holder check} step can be done by the Veriview by associating the \acrshort{DID} with the Veriview user account. The association can be done by sending a challenge to the user and asking them to sign the challenge with an associated public key. The \textbf{issuer check} should be done by individual review consumers, meaning Veriview does not accredit or endorse any issuers to be valid journals. Veriview serves as a neutral platform for showcasing any peer review credentials. Checks on whether the given journal is a credible one is left to review consumers, where we make use of \lstinline{did:web} to make this process easier.
+The \textbf{holder check} step can be done by the Veriview by associating the \acrshort{DID} with the Veriview user account. The association can be done by sending a challenge to the user and asking them to sign the challenge with an associated public key. The \textbf{issuer check} should be done by individual review consumers, meaning Veriview does not accredit or endorse any issuers to be valid journals. Veriview serves as a neutral platform for showcasing any peer review credentials. Checks on whether the given journal is a credible one is left to review consumers, where we make use of \lstinline{did:web} to make this process easier \hyperref[rq:direct-trust]{(RQ5)}.
 
-The above steps are based on a typical \acrlong{VC} credential exchange where the identities can remain pseudonymous. In our setting, the identities are open (reviewers associate reviews with their profiles publicly). Therefore, by requiring the holder information (\lstinline{author} of the review) to be included in the credential when exchanging credentials, it is possible to skip the \textbf{holder authentication}, \textbf{holder check}, and \textbf{presentation verification}. In other words there is no need to wrap the credentials in a presentation. By checking the \lstinline{author} information such as the \lstinline{id} and \lstinline{email} it is possible to make sure that the credential holder and the researcher that is adding the review to his profile are the same person.
+The above steps are based on a typical \acrlong{VC} credential exchange where the identities can remain pseudonymous. In our setting, the identities are open (reviewers associate reviews with their profiles publicly). Therefore, by requiring the holder information (\lstinline{author} of the review) to be included in the credential when exchanging credentials, it is possible to skip the \textbf{presenter authentication}, \textbf{holder check}, and \textbf{presentation verification}. In other words there is no need to wrap the credentials in a presentation. By checking the \lstinline{author} information such as the \lstinline{id} and \lstinline{email} it is possible to make sure that the credential holder and the researcher that is adding the review to his profile are the same person.
 
-In this case, a \acrshort{DID} is not required as credentials don't need to be wrapped in a presentation and signed with a key that is associated with a \acrshort{DID}. A simple check between the identifier/email in the credential and the user identifier/email will be sufficient to authenticate the holder. A researcher can still associate a \acrshort{DID} with their Veriview account by signing a challenge, and add the reviews with the \acrshort{DID} as the \lstinline{author} identifier to their profile. An alternative is to use a centralized identifier such as \acrshort{ORCID} or an email for holder authentication. This, however, requires a degree of trust in Veriview as the platform needs to associate a researcher account with an \acrshort{ORCID} account with a single sign-on, or with an email by sending a verification email. Nevertheless, this is a reasonable level of trust as \acrshort{ORCID} profiles are open and emails of researchers are also usually publicly available.
+In this case, a \acrshort{DID} is not required as credentials don't need to be wrapped in a presentation and signed with a key that is associated with a \acrshort{DID}. A simple check between the identifier/email in the credential and the user identifier/email will be sufficient to authenticate the holder. A researcher can still associate a \acrshort{DID} with their Veriview account by signing a challenge, and add the reviews with the \acrshort{DID} as the \lstinline{author} identifier to their profile. An alternative is to use a centralized identifier such as \acrshort{ORCID} or an email for presenter authentication. This, however, requires a degree of trust in Veriview as the platform needs to associate a researcher account with an \acrshort{ORCID} account with a single sign-on, or with an email by sending a verification email. Nevertheless, this is a reasonable level of trust as \acrshort{ORCID} profiles are open and emails of researchers are also usually publicly available.
 
 \subsubsection{Peer Review Credential Derivation}
 
-Credential derivation is the key functionality of the system. It allows the selective disclosure of the attributes, and hence lets sharing closed reviews publicly without losing the verifiability of the documents. Ideally, this step is executed by the holder's wallet and the original credential does not leave the wallet. If the wallet supports the signature scheme the credential is issued in, the user would select the attributes of the peer review they would like to disclose and the wallet will generate the derived credential with a zero-knowledge proof.
+Credential derivation is the key functionality of the system. It allows the selective disclosure of the attributes \hyperref[rq:selective-disclosure]{(RQ6)}, and hence lets sharing closed reviews publicly without losing the verifiability of the documents. Ideally, this step is executed by the holder's wallet and the original credential does not leave the wallet. If the wallet supports the signature scheme the credential is issued in, the user would select the attributes of the peer review they would like to disclose and the wallet will generate the derived credential with a zero-knowledge proof.
 
 For instance, a review author may have the review credential in Listing \ref{lst:exampleReview} issued and would like to share their review publicly. If the review was a blinded review, the information shared must not identify the researcher as the reviewer of the manuscript they reviewed. With a review credential signed with \lstinline{BbsBlsSignature2020} they can decide to only include the \lstinline{author}, \lstinline{journal}, \lstinline{id}, and \lstinline{type} fields of the \lstinline{credentialSubject} and exclude \lstinline{manuscript}, \lstinline{content} etc. They can generate the derived credential in Listing \ref{lst:derivedCredential}. This document contains the selected attributes of the original credential, but different than the original credential, its \lstinline{proof} does not contain a signature signed by the issuer in its \lstinline{proofValue}. Instead, the value is a zero-knowledge proof that the holder of this derived document has the knowledge of a valid signature of the original document.
 
@@ -234,23 +232,15 @@ Next, Veriview will perform a verification on the credential. It will retrieve t
 If the credential is verified with the issuer key, Veriview will check if the intended holder of the credential is the current Veriview user. As stated, instead of creating a verifiable presentation, this can be done by checking the user identifier or email on Veriview against the user identifier or email in the uploaded credential. If there is a match, this means the holder of the credential and the user are the same persons. Finally, the review and the credential gets added to the user profile and becomes available for the review consumers' use.
 
 \subsection{The Role of Distributed Ledgers}
+%% TODO: Refer to DPKI paper of Vitalik, Allen etc.
 
-Distributed ledgers are widely used in the \acrshort{SSI} implementations \parencite{vanBokkem.29Nis2019}.The the properties of blockchains such as trustlessness, censorship resistance \parencite{DiFrancescoMaesa.2020} makes them a good candidate as a base for a user-centric identity system \parencite{cameron2009appendix}.
+Distributed ledgers are widely used in the \acrshort{SSI} implementations \parencite{vanBokkem.29Nis2019}. The properties of blockchains such as trustlessness, and censorship resistance \parencite{DiFrancescoMaesa.2020} makes them a good candidate as a base for a user-centric identity system \parencite{cameron2009appendix}.
 %% TODO: properties of DLT for using in SSI
 However, due to their publicity and immutability, no personal data should reside on public blockchains \parencite{blockchain-gdpr}. 
 
 As of what goes onto a blockchain in such a credentials system, there are two things. First, the contexts and schemas would benefit from high availability and the immutability of blockchains. These documents should not be changed (without versioning) and therefore the immutable distributed ledgers are a natural choice. Alternatively, content addressed storages such as \acrshort{IPFS} can be used to ensure the immutability of files. Also, since these documents are widely and commonly used by stakeholders of a \acrshort{VC} system, they will benefit from the high availability of distributed ledgers. For instance, if the \acrshort{W3C} server, which currently serves the \acrshort{VC} base context goes offline, it won't be possible to fetch the context and therefore to verify credentials, unless the context is cached. Additionally, hosting contexts and schemas on a public ledger enhances the privacy as the verifier would not contact the issuer when verifying, and the issuer will not be able to correlate different requests. For the current use case, however, this is not a major concern. 
 
 Second, the identities and their associated keys can be stored on blockchains. There exists many \acrshort{DID} methods based on distributed ledgers \parencite{did-spec-registry}. However, as stated, identities on blockchains are isolated and need to be connected with the real world identities. This requires an additional step and therefore is not the preferred \acrshort{DID} method in this work. 
-
-
-%% TODO: Refer to DPKI paper of Vitalik, Allen etc.
-
-\subsection{Evaluation of Requirements}
-
-
-
-
 
 
 
@@ -269,9 +259,9 @@ Second, the identities and their associated keys can be stored on blockchains. T
 %% No verifiable presentations
 %% contexts not on ledger or IPFS but GitHub
 
-A working proof of concept application is developed to demonstrate the technical feasibility of the proposed solution. The source code is open and available at GitHub \footnote{https://github.com/kuzdogan/peer-review-verifiable-credentials-thesis}. Thanks to the vibrant community around VCs and SSI, and existing open source libraries it was possible create a working prototype. The implementation mainly relies on the jsonld-signatures-bbs library \footnote{https://github.com/mattrglobal/jsonld-signatures-bbs} by MATTR global \footnote{https://mattr.global/} which is a cryptographic suite of BBS+ signatures to sign, verify, and selectively disclose JSON-LD documents. Since VCs adopts JSON-LD as one of its representation formats, the library can be used for VC implementations as well.
+A working proof of concept application is developed to demonstrate the technical feasibility of the proposed solution. The source code is open and available at GitHub\footnote{https://github.com/kuzdogan/peer-review-verifiable-credentials-thesis}. Thanks to the vibrant community around VCs and SSI, and existing open source libraries it was possible to create a working prototype. The implementation mainly relies on the jsonld-signatures-bbs library\footnote{https://github.com/mattrglobal/jsonld-signatures-bbs} by MATTR global\footnote{https://mattr.global/} which is a cryptographic suite of BBS+ signatures to sign, verify, and selectively disclose JSON-LD documents. Since VCs adopts JSON-LD as one of its representation formats, the library can be used for VC implementations as well.
 
-To simulate a typical peer review workflow two different applications were developed: a simple journal management system for submitting and reviewing manuscripts, and a peer review aggregation platform that accepts BBS+ peer review verifiable credentials. An overview of the prototype is given in Figure \ref{fig:prototype}
+To simulate a typical peer review workflow two different applications were developed: a simple journal management system for submitting and reviewing manuscripts, and a peer review showcasing platform that accepts BBS+ signature peer review verifiable credentials. An overview of the prototype is given in Figure \ref{fig:prototype}
 
 \begin{figure}[htpb]
   \centering
@@ -281,9 +271,9 @@ To simulate a typical peer review workflow two different applications were devel
 
 \subsection{Journal X}
 
-Journal X is the simulated journal management system. Researchers can create an account an submit a manuscript to the journal. The prototype is deployed at \url{https://journalx.herokuapp.com}. The application is built on a \acrshort{MERN} stack. The MongoDB database stores the \lstinline{User} and login \lstinline{Token} data, in addition to the \lstinline{Manuscript}, \lstinline{Review}, and the \lstinline{ReviewTask} data. The \acrshort{CRUD} operations are done through the Mongoose driver that runs on the NodeJs Express server.
+Journal X is the simulated journal management system. Researchers can create an account and submit a manuscript to the journal. The prototype is deployed at \url{https://journalx.herokuapp.com}. The application is built on a \acrshort{MERN} stack. The MongoDB database stores the \lstinline{User} and login \lstinline{Token} data, in addition to the \lstinline{Manuscript}, \lstinline{Review}, and the \lstinline{ReviewTask} data. The \acrshort{CRUD} operations are done through the Mongoose driver that runs on the NodeJs Express server.
 
-As the issuer identifier in the verifiable credentials, \acrshort{DID}s are used. The preferred \acrshort{DID} method is \lstinline{did:web} and the \acrshort{DID} of the implemented journal is \lstinline{did:web:journalx.herokuapp.com}. The document contains the public keys belonging to the journal that are used in credential verification. The \acrshort{DID} document is given in Listing \ref{lst:did-doc}.
+As the issuer identifier in the credentials \acrshort{DID}s are used. The preferred \acrshort{DID} method is \lstinline{did:web} and the \acrshort{DID} of the implemented journal is \lstinline{did:web:journalx.herokuapp.com}. The document contains the public keys belonging to the journal that are used in credential verification. The \acrshort{DID} document is given in Listing \ref{lst:did-doc}.
 
 \lstinputlisting[language=json, caption={Journal X \acrshort{DID} document},label={lst:did-doc}]{code/did-doc.json}
 
@@ -315,7 +305,7 @@ Upon submission, a review process has been initiated for the manuscript. The edi
   \caption{View Review and Issue Verifiable Credential} \label{fig:view-review}
 \end{figure}
 
-When the credential is issued, it is downloaded to the reviewer's device as a file in \lstinline{.jsonld} format. Ideally these credentials are stored encrypted in a credential wallet or another dedicated application and only leave the application after deriving the credential. However, our prototype does not include a wallet since there are no existing ready to use wallet applications that support BBS+ signatures and credential derivation. Also, the credential exchange should be mediated by a secure protocol such as DIDComm\footnote{https://identity.foundation/didcomm-messaging/spec/}.  Instead, the users download their credentials plain text and use this file in the platforms. The secure connection is also out of scope of this work and only a HTTPS connection is established between the user and the platforms.
+When the credential is issued, it is downloaded to the reviewer's device as a file in \lstinline{.jsonld} format. Ideally these credentials are stored encrypted in a credential wallet or another dedicated application and only leave the application after deriving the credential. However, our prototype does not include a wallet since there are no existing ready to use wallet applications that support BBS+ signatures and credential derivation. Also, the credential exchange should be mediated by a secure protocol.  Instead, the users download their credentials plain text and use this file in the platforms. The secure connection is also out of scope of this work and only a HTTPS connection is established between the user and the platforms.
 
 \subsection{Veriview}
 
@@ -339,4 +329,19 @@ After selecting the attributes to be shared, a new credential will be derived fr
 
 Finally users can view their profiles, and their profiles are publicly available at their unique \acrshort{URL}s. On this page the review consumers can view the review contributions of a researcher.
 
-The prototype is not a complete implementation of the conceptual design and only serves the purpose of demonstrating the technical feasibility of the conceived system, in particular the \acrshort{VC} implementation of peer reviews including the issuance, verification of the credentials, and the selective disclosure with the zero-knowledge proofs. Table provides a comparison between the original design and the implemented prototype. 
+\subsubsection{Comparison to the conceptual design}
+
+The prototype is not a complete implementation of the conceptual design and only serves the purpose of demonstrating the technical feasibility of the conceived system, in particular the \acrshort{VC} implementation of peer reviews including the issuance, verification of the credentials, and the selective disclosure with the zero-knowledge proofs. Below are the main differences between the original design and the implemented prototype.
+
+\begin{itemize}
+    \item \textbf{Wallet:} Verifiable credentials normally should be stored and managed in wallet applications as they contain personal information. Another reason is to be able to complete other actions in \acrshort{VC} exchanges such as establishing a secure channel, selective disclosure, verification of credentials or wrapping credentials into verifiable presentations. Our implementation does not include a wallet application and the mentioned steps are either omitted or done by different parts of the application. As a secure channel only \acrshort{HTTP}S connection is available and users directly download the credentials issued by the journal. As discussed, usage of verifiable presentations in credential exchange can be skipped by checking the identifier/email information of the review author. Additionally we make use of the Veriview application for credential verification, and selective disclosure. When a user adds a credential, the client side application fetches the \lstinline{issuer} \acrshort{DID} and verifies the credential. Users can also derive selectively disclosed credentials on the client side without the credentials being sent to the server. 
+    
+    \item \textbf{Review Invitation:} In a typical review process, journal editors invite researchers to review manuscripts. Researchers can accept or reject this invitation. However, in the prototype the editor can directly assign researchers as reviewers.
+    
+    \item \textbf{Credential Issuance:} Upon receiving the peer review journals may decide not to immediately issue peer review credentials to review authors. Journals may wait until the decision to publish the manuscript has been made or until the manuscript is published. In the prototype review authors can immediately download their review credentials.
+    
+    \item \textbf{Duplicate Reviews:} When users are adding a review credential to their profile, it should be checked if the review has already been added to avoid showing a review contribution multiple times as if they are different reviews. This can be simply done by requiring the identifier of the review in the credential, which is unique and consistently assigned by the issuing journal. The prototype does not complete this check to allow first time users test out selective disclosure without needing to write a new review, but it is a fairly simple change.
+    
+    \item \textbf{Reviewer Identifier/Email Check:} As discussed in the design section, it is possible to skip some extra steps in the \acrshort{VC} verification by checking the review author identifier/email when adding a review to the Veriview. Even though users provide an email when signing in to the Veriview prototype, this check is not made as it requires an implementation of email and \acrshort{DID} verification, and it is out of the scope of the prototype.
+    
+\end{itemize}

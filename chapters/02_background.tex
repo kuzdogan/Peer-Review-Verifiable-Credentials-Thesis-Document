@@ -120,11 +120,11 @@ The examples above are \acrshort{JSON-LD} documents but they are not verifiable 
     \item And the following properties: \lstinline{credentialSubject, issuer, issuanceDate, proof}
 \end{itemize}
 
-A minimal verifiable credential in \acrshort{JSON-LD} format is shown in Listing \ref{lst:exampleVC}.
+A minimal verifiable credential and a verifiable presentation in \acrshort{JSON-LD} format are shown in Listings \ref{lst:exampleVC} and \ref{lst:exampleVP}.
 
 \lstinputlisting[language=json, caption={Example verifiable credential \parencite{Sporny.18Kas2019}},label={lst:exampleVC}]{code/exampleVerifiableCredential.json}
 
-
+\lstinputlisting[language=json, caption={Example verifiable presentation \parencite{Sporny.18Kas2019}},label={lst:exampleVP}]{code/exampleVerifiablePresentation.json}
 
 %%%%%%
 %%%%%%  Public Key Crpyto and Zk proofs
@@ -206,7 +206,7 @@ did:web:example.com
 
 Each \acrshort{DID} resolves to a \acrshort{DID} document, similar to how \lstinline{http://www.example.com} resolves to an HTML file. Different methods have different resolvers and may have their own internal way of creating method specific identifiers. A \acrshort{DID} document describes the meta-data associated with the object it identifies in a \acrshort{JSON-LD} format. This may include the public keys associated, the controller of the document, the services and the service endpoints available for the described object etc. The \acrshort{DID} \lstinline{did:example:123456789abcdefghi} may resolve to the following document in Listing \ref{lst:did-doc-example} which describes two public keys assoicated with it for verification purposes, and one for authentication. It also expresses that this object is controlled by the \acrshort{DID} \lstinline{did:example:bcehfew7h32f32h7af3}, and a service associated with it. This may for instance be an identifier for an \acrshort{IoT} device with an \lstinline{EncryptedDataVault} owned by a user identified with \lstinline{did:example:bcehfew7h32f32h7af3}.
 
-\begin{lstlisting}[language=json, label={lst:did-doc-example}, caption={Example\acrlong{DID} document \parencite{reed_sporny_longley_allen_grant_sabadello_2021}}]
+\begin{lstlisting}[language=json, label={lst:did-doc-example}, caption={Example \acrlong{DID} document \parencite{reed_sporny_longley_allen_grant_sabadello_2021}}]
 {
   "@context": [
     "https://www.w3.org/ns/did/v1",
@@ -239,7 +239,3 @@ Each \acrshort{DID} resolves to a \acrshort{DID} document, similar to how \lstin
 \end{lstlisting}
 
 \acrshort{DID}s and \acrshort{VC}s are both part of the \acrfull{SSI} ecosystem. Still, both specifications are separate and do not depend on each other. Since \acrshort{DID}s are \acrshort{URI}s, they can be used in the fields that are required to be \acrshort{URI}s in verifiable credentials. This includes \lstinline{id} fields, \lstinline{issuer}, \lstinline{verificationMethod}. Using \acrshort{DID}s in \lstinline{issuer} and \lstinline{verificationMethod} leverages the public keys associated with \acrshort{DID}s and the verification can be done using the keys associated.
-
-\section{Related Work}
-
-The problems in peer review caught the attention of scientists. Besides the descriptive literature on peer review’s shortcomings, a variety of works discussed and prescribed solutions to the incentive problem. An often encountered suggestion is to ask researchers to do sufficient reviews to balance the system, usually 3 reviews per paper, a “quid pro quo” (\cite{Derraik.2015}, \cite[5201]{Grainger.2007}). To maintain the timeliness of the process \cite{Hauser.2007} suggest a punishment for reviewers who return their reviews late and a reward for the ones returning on time. \cite{Ferreira.2016} suggest making peer review mandatory and paying the reviewers and calls for a decoupling of the peer review system from the scientific publishing by founding a Global Peer Review Platform. Direct monetary compensation of reviewers was also suggested many times \parencite{Prufer.2010}. \cite{Fox.2010} suggest a credit system where authors have to pay for their submissions and earn by conducting reviews, effectively “privatizing the reviewer commons”. Others proposed crypto-economic models through peer review tokens on a blockchain that will work as credits for peer reviews or as reputation indicators \parencite{Avital.2018, Jan.2018c, Spearpoint.2017, Tarkhanov.2020}. Also using a blockchain-based token and lotteries \cite{Janowicz.2018} provide a model for how integrating distributed ledger technologies could benefit the Semantic Web journal’s processes. \cite{TenorioFornes.2019} suggest a whole publishing system that is decentralized using Ethereum and IPFS. Ants-Review suggests an Ethereum based incentive system with its native token ANTS that allows bounties for open anonymous peer reviews \parencite{TrovoMassari}.
