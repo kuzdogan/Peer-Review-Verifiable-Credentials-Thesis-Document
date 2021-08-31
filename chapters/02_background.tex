@@ -12,7 +12,7 @@ Subjects of claims are not necessarily persons and can be anything. In a peer re
 \begin{figure}[htbp]
   \centering
   \includesvg[width=0.8\textwidth]{claim-example}
-  \caption{Example Subject-Property-Value relationship of a graduation claim \parencite{Sporny.18Kas2019}} \label{fig:alumniOf}
+  \caption{Example subject-property-value relationship of a graduation claim \parencite{Sporny.18Kas2019}} \label{fig:alumniOf}
 \end{figure}
 
 Although people usually associate credentials to be issued only by a respected authority such as a state, a university or a hospital, \acrlong{VC} allows anyone to issue claims. Yet, each credential is meaningful in a certain context and depending on the trust relationships between parties. An \textit{alumniOf} claim is only meaningful if issued by a university that is known to the employer in a job application or a \textit{goodHusband} claim only makes sense if issued by a spouse. Parties that receive a credential can choose to accept or reject a credential depending on the real world trust relationships.
@@ -41,7 +41,7 @@ The specification also describes an extension to the \acrshort{VC} data model th
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/presentation.png}
-  \caption{Outline of a Verifiable Presentation} \label{fig:presentation}
+  \caption{Outline of a verifiable presentation} \label{fig:presentation}
 \end{figure}
 
 \subsection{Syntax}
@@ -133,7 +133,7 @@ A minimal verifiable credential and a verifiable presentation in \acrshort{JSON-
 
 \subsection{Digital Signatures}
 
-At the heart of today's applications and protocols lies the public key cryptography. The encryption scheme is based on a pair of keys: a public key which can be shared publicly or with the verifying party, and a private key which must be kept absolutely secret except its owner. Hence, it's also called asymmetric cryptography. A user can encrypt a message with their private key, and publish the message and their public key. Anyone anyone can then decrypt the encrypted message with the public key which assures this message was encrypted by the owner of the corresponding private key. Also by encrypting messages with the public key, others can ensure only the owner of the corresponding private key can decrypt the message.
+At the heart of today's applications and protocols lies the public key cryptography. The encryption scheme is based on a pair of keys: a public key which can be shared publicly or with the verifying party, and a private key which must be kept absolutely secret except its owner. Hence, it is also called asymmetric cryptography. A user can encrypt a message with their private key, and publish the message and their public key. Anyone anyone can then decrypt the encrypted message with the public key which assures this message was encrypted by the owner of the corresponding private key. Also by encrypting messages with the public key, others can ensure only the owner of the corresponding private key can decrypt the message.
 
 This encryption scheme can also be used to create digital signatures. Apart from the key generation there are two main methods in a digital signature scheme. The \textit{sign} function takes a message and a private key as inputs and generates a signature. The \textit{verify} function takes the message, the digital signature, and the public key as inputs and outputs a boolean value \lstinline{true} if the signature is valid or \lstinline{false} otherwise. Upon receiving a message and a signature, the receiver, if they know the public key of the sender, can verify it. By verifying the message the receiver can check two things:
 \begin{enumerate}
@@ -177,18 +177,18 @@ Zero-knowledge proofs of knowledge are protocols in cryptography where a \textit
 Properties of zero-knowledge proofs are as follows \parencite{Groth.2010}:
 \begin{itemize}
   \item \textbf{Completeness:} If the statement is true, the verifier will be convinced by the proof the prover presents that the statement is true
-  \item \textbf{Soundness:} If the statement is false, a malicious prover can't convince the verifier that it is true.
+  \item \textbf{Soundness:} If the statement is false, a malicious prover can not convince the verifier that it is true.
   \item \textbf{Zero-Knowledge:} If the statement is true, a malicious verifier does not learn anything else than the fact that the statement is true.
 \end{itemize}
 
 The first two properties are also requirements for interactive proofs. The work of \cite{Goldwasser.1985} has first introduced the third property of Zero-Knowledge. A proof in a zero-knowledge proof system is not deterministic but a probabilistic proof. Through many rounds it is possible to decrease the error to practically negligible values. \cite{Goldreich.1991} also show that with the assumption of an unbreakable encryption, it is possible to create a zero-knowledge proof for the graph coloring problem. This is significant since the graph coloring problem is NP-complete and every NP problem can be reduced to an NP-complete problem in polynomial time, meaning every problem in NP has a zero-knowledge proof. 
 
-These initial zero-knowledge proofs are also interactive, that is the prover and the verifier need to exchange information on each round. Each time a proof needs to be made, the prover and the verifier need to be online and interact in multiple rounds, which makes the usability of the protocol difficult. Also, since the soundness of the proof relies on the randomness of the challenges of the verifier on each round, a third-party cannot be convinced by such a proof. By looking at the protocol transcript and the proof, they can't be assured if this randomness holds. \cite{Blum.1988} have shown that with a common reference string shared by the prover and the verifier, it is possible to create non-interactive zero-knowledge proofs. The common reference string need not be private, which makes non-interactive zero-knowledge proofs more practical than interactive ones.
+These initial zero-knowledge proofs are also interactive, that is the prover and the verifier need to exchange information on each round. Each time a proof needs to be made, the prover and the verifier need to be online and interact in multiple rounds, which makes the usability of the protocol difficult. Also, since the soundness of the proof relies on the randomness of the challenges of the verifier on each round, a third-party cannot be convinced by such a proof. By looking at the protocol transcript and the proof, they can not be assured if this randomness holds. \cite{Blum.1988} have shown that with a common reference string shared by the prover and the verifier, it is possible to create non-interactive zero-knowledge proofs. The common reference string need not be private, which makes non-interactive zero-knowledge proofs more practical than interactive ones.
 
 
 \section{Decentralized Identifiers}
 
-\acrfull{DID}s \parencite{reed_sporny_longley_allen_grant_sabadello_2021} are a new type of globally unique identifiers that don't depend on centralized identity providers or registries, and give their users full control of their identity. \acrshort{DID}s follow the \acrshort{URI} syntax with a \lstinline{did:} scheme followed by a method and the method specific identifier. Some examples of \acrshort{DID}s are given in Listing \ref{lst:did-example}.
+\acrfull{DID}s \parencite{reed_sporny_longley_allen_grant_sabadello_2021} are a new type of globally unique identifiers that do not depend on centralized identity providers or registries, and give their users full control of their identity. \acrshort{DID}s follow the \acrshort{URI} syntax with a \lstinline{did:} scheme followed by a method and the method specific identifier. Some examples of \acrshort{DID}s are given in Listing \ref{lst:did-example}.
 
 \begin{lstlisting}[label={lst:did-example}, caption={\acrlong{DID} examples}]
 did:example:123456789abcdefghi
