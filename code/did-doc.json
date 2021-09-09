@@ -6,7 +6,7 @@
       "id": "did:web:journalx.herokuapp.com#credentialsKey",
       "type": "BbsBlsSignature2020",
       "controller": "did:web:journalx.herokuapp.com",
-      "publicKeyBase58": "23V58StUorHjCjukwEfuyvSMDAisf5sgxKvBCAyt3jQTD5zVCw57haoqotHxbqQQZ5WmruofpXUfSNDEVv9gfHE7sFD4fULfhESpJC2FyH2CNaga1Tuzr6VpMcAfUvo3BYGA"
+      "publicKeyBase58": "23V58StUorHjCjukwEfuyvSMDAisf5sgxKvBCAyt3jQTD5zVCw57hao qotHxbqQQZ5WmruofpXUfSNDEVv9gfHE7sFD4fULfhESpJC2FyH2 CNaga1Tuzr6VpMcAfUvo3BYGA"
     }
   ],
   "verificationMethod": [
@@ -14,7 +14,7 @@
       "id": "did:web:journalx.herokuapp.com#credentialsKey",
       "type": "BbsBlsSignature2020",
       "controller": "did:web:journalx.herokuapp.com",
-      "publicKeyBase58": "23V58StUorHjCjukwEfuyvSMDAisf5sgxKvBCAyt3jQTD5zVCw57haoqotHxbqQQZ5WmruofpXUfSNDEVv9gfHE7sFD4fULfhESpJC2FyH2CNaga1Tuzr6VpMcAfUvo3BYGA"
+      "publicKeyBase58": "23V58StUorHjCjukwEfuyvSMDAisf5sgxKvBCAyt3jQ TD5zVCw57haoqotHxbqQQZ5WmruofpXUfSNDEVv9gfHE7sFD 4fULfhESpJC2FyH2CNaga1Tuzr6VpMcAfUvo3BYGA"
     }
   ]
 }

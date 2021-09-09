@@ -1,26 +1,26 @@
 \chapter{\abstractname}
 
-Peer review is an essential part of scientific publishing. Despite the acknowledged importance, it is shown to be far from perfect. Moreover, current ways to assess academic success and reliance on citation-based metrics result in incentives to publish more and review less. The process can be improved by increasing the incentives to review more. Often, reviews are blinded and not published which makes it is difficult to verify if the review took place and to credit the reviewer for the work. Peer review recognition platforms such as Publons act as trusted third parties verifying reviews. Such platforms are becoming the only owners of the world’s peer review data and publishers are effectively giving away this valuable data for free. 
+Peer review is an essential part of scientific publishing and scientific knowledge creation. Despite the acknowledged importance, current incentives in scientific publishing are not towards doing peer reviews but instead to publish more peer reviewed papers. The process itself is also shown to have problems such as bias, inconsistency, and ineffectiveness. The community generally agrees that it can be improved by increasing the recognition and incentives for peer reviews. Often, reviews are blinded and cannot be published which makes it is difficult to credit the reviewers for their work. Peer review recognition platforms such as Publons try to solve this problem by acting as trusted third-parties verifying reviews and letting researchers build a peer review resume. However, the ownership of this data under a single commercial entity might have unwanted consequences from an open science perspective, in particular the availability and the transparency of the data. These concerns became more evident with the acquisition of Publons by Clarivate Analytics. It is of benefit to avoid the mistakes made in the scientific publishing that resulted with centralization and limited access to information.
 
-Recently a specification and data model called \acrfull{VC} became an official W3C recommendation. It is claimed to enable credential exchange in a secure and privacy-preserving way by selective disclosure of claims and zero-knowledge proofs which lets proving a statement without having to share the underlying data. This Design Science Research work is aimed to explore the verification of closed reviews without a trusted third party. The viability of Verifiable Credentials and zero-knowledge proofs will be explored with a system design as the artifact and learnings will be shared.
+Recently a specification called \acrlong{VC} became an official \acrshort{W3C} recommendation. It is claimed to enable credential exchange in a secure and privacy-preserving way by selective disclosure of claims and zero-knowledge proofs which let proving a statement without having to share the underlying data. This Design Science Research work is aimed to explore the verification of closed reviews without a trusted third-party using these recent technologies. The designed system also proposes a peer review showcasing system similar to Publons. A working prototype is implemented using the existing tools and libraries to demonstrate the feasibility of the design. The finished design is evaluated for the self imposed requirements and through five qualitative interviews with researchers that have reviewing experience. Based on the findings an acceptance model for the designed system is proposed. 
 
 \makeatletter
-\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
-{\renewcommand{\abstractname}{Kurzfassung}}
-{\renewcommand{\abstractname}{Abstract}}
-\makeatother
+%\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+% {\renewcommand{\abstractname}{Kurzfassung}}
+%{\renewcommand{\abstractname}{Abstract}}
+%\makeatother
 
-\chapter{\abstractname}
+%\chapter{\abstractname}
 
 %TODO: Abstract in other language
-\begin{otherlanguage}{ngerman} % TODO: select other language, either ngerman or english !
+%\begin{otherlanguage}{ngerman} % TODO: select other language, either ngerman or english !
 
-\end{otherlanguage}
+%\end{otherlanguage}
 
 
 % Undo the name switch
-\makeatletter
-\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
-{\renewcommand{\abstractname}{Abstract}}
-{\renewcommand{\abstractname}{Kurzfassung}}
-\makeatother
+%\makeatletter
+%\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+%{\renewcommand{\abstractname}{Abstract}}
+%{\renewcommand{\abstractname}{Kurzfassung}}
+%\makeatother
